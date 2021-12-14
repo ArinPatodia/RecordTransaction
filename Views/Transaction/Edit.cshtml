@@ -1,0 +1,52 @@
+﻿@model Transaction
+@{
+    string title = ViewBag.Action + " Transaction";
+    ViewBag.Title = title;
+}
+
+<h2>@title</h2>
+
+<form asp-action="@ViewBag.Action" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="Company.TickerSymbol">Ticker symbol</label>
+        <input asp-for="Company.TickerSymbol" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TransactionTypeId">Transaction Type</label>
+        <select asp-for="TransactionTypeId" class="form-control">
+            <option value="">Select a transaction type..</option>
+            @foreach (TransactionType txnType in ViewBag.TransactionTypes)
+            {
+                <option value="@txnType.TransactionTypeId">@txnType.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Company.CompanyName">Company name</label>
+        <select asp-for="Company.CompanyName" class="form-control" asp-items="@ViewBag.CompanyName"></select> 
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Company.Address">Address</label>
+        <input asp-for="Company.Address" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Quantity">Quantity</label>
+        <input asp-for="Quantity" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SharePrice">Share price</label>
+        <input asp-for="SharePrice" class="form-control">
+    </div>
+
+    <input type="hidden" asp-for="TransactionId" />
+
+    <button type="submit" class="btn btn-primary">@ViewBag.Action</button>
+    <a asp-controller="TransactionRecord" asp-action="Index" class="btn btn-primary">Cancel</a>
+</form>

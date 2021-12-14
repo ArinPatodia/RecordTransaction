@@ -1,0 +1,56 @@
+﻿@model List<Transaction>
+@{
+    ViewData["Title"] = "My Transactions";
+}
+@if (TempData.Keys.Contains("LastActionMessage")) 
+{ 
+    <h4 class="alert-info">@TempData["LastActionMessage"]</h4>
+}
+<h2>@ViewData["Title"]</h2>
+
+<a asp-controller="Transaction" asp-action="Add">Create New</a>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Ticker Symbol</th>
+            <th>Company Name</th>
+            
+            <th>Transaction Type</th>
+            <th>Quantity</th>
+            <th>Share Price</th>
+            @*<th>Commission Fee</th>*@
+            <th>Gross Value</th>
+            <th>Net Value</th>
+            @*<th>Action</th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var txn in Model)
+        {
+        <tr>
+            <td>@txn.Company.TickerSymbol</td>
+            <td>@txn.Company.CompanyName</td>
+            
+            <td>@txn.TransactionType.Name</td>
+            <td>@txn.Quantity</td>
+            <td>@txn.SharePrice?.ToString("c2")</td>
+            @*<td>@txn.TransactionType.CommissionFee?.ToString("c2")</td>*@
+            @if (@txn.TransactionType.Name == "Buy")
+            {
+                <td>$(@txn.GetGrossValue()?.ToString("0.00"))</td>
+                <td>$(@txn.GetNetValue()?.ToString("0.00"))</td>
+            }
+            else
+            {
+                <td>@txn.GetGrossValue()?.ToString("c2")</td>
+                <td>@txn.GetNetValue()?.ToString("c2")</td>
+            }
+            @*<td>
+                <a asp-controller="Transaction" asp-action="Edit" asp-route-id="@txn.TransactionId">Edit</a>
+                <span class="action-spacer">|</span>
+                <a asp-controller="Transaction" asp-action="Delete" asp-route-id="@txn.TransactionId">Delete</a>
+            </td>*@
+        </tr>
+        }
+    </tbody>
+</table>
